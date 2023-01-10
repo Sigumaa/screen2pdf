@@ -78,4 +78,11 @@ func ImageToPdf(pdfName string, images []string) {
 		pdf.Image(images[i], 0, 0, &SIZE)
 	}
 	pdf.WritePdf(fmt.Sprint(pdfName, ".pdf"))
+	DeleteTmpPNG(images)
+}
+
+func DeleteTmpPNG(images []string) {
+	for i := 0; i < len(images); i++ {
+		os.Remove(fmt.Sprintf("tmp_%d.png", i))
+	}
 }
