@@ -1,27 +1,81 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/kbinani/screenshot"
+	"github.com/signintech/gopdf"
 	"image/png"
 	"os"
+	"strconv"
+	"strings"
+	"time"
 )
 
 func main() {
-	n := screenshot.NumActiveDisplays()
-
-	for i := 0; i < n; i++ {
-		bounds := screenshot.GetDisplayBounds(i)
-
-		img, err := screenshot.CaptureRect(bounds)
+	s := bufio.NewScanner(os.Stdin)
+	for {
+		pdfName := Scan(s, "保存するPDFファイル名を入力してください")
+		imageCount, err := strconv.Atoi(Scan(s, "何枚撮影するかを入力してください"))
 		if err != nil {
-			panic(err)
+			fmt.Println("撮影枚数は数字で入力してください。")
+			continue
 		}
-		fileName := fmt.Sprintf("%d_%dx%d.png", i, bounds.Dx(), bounds.Dy())
+		imageTime, err := strconv.Atoi(Scan(s, "何秒間隔で撮影するか入力してください"))
+		if err != nil {
+			fmt.Println("撮影間隔は数字で入力してください。")
+			continue
+		}
+		images := ScreenToImage(imageCount, imageTime)
+		ImageToPdf(pdfName, images)
+
+		c := Scan(s, "まだPDFを作成しますか？y/N")
+		if strings.ToLower(c) != "y" {
+			break
+		}
+	}
+}
+
+func Scan(s *bufio.Scanner, text string) string {
+	for {
+		fmt.Print(text, ": ")
+		s.Scan()
+		input := s.Text()
+		if input != "" {
+			return input
+		}
+	}
+}
+
+func ScreenToImage(imageCount, imageTime int) []string {
+	var images []string
+
+	fmt.Println(imageCount, "秒後に撮影を開始します。")
+	for i := 0; i < imageCount; i++ {
+		for j := imageTime; j > 0; j-- {
+			time.Sleep(time.Second)
+			if j <= 3 {
+				fmt.Println(j)
+			}
+		}
+		bounds := screenshot.GetDisplayBounds(1)
+		img, _ := screenshot.CaptureRect(bounds)
+		fileName := fmt.Sprintf("tmp_%d.png", i)
 		file, _ := os.Create(fileName)
 		defer file.Close()
 		png.Encode(file, img)
-
-		fmt.Printf("#%d : %v \"%s\"\n", i, bounds, fileName)
+		images = append(images, fileName)
 	}
+	return images
+}
+
+func ImageToPdf(pdfName string, images []string) {
+	pdf := gopdf.GoPdf{}
+	SIZE := gopdf.Rect{W: 1920, H: 1080}
+	pdf.Start(gopdf.Config{PageSize: SIZE})
+	for i := 0; i < len(images); i++ {
+		pdf.AddPage()
+		pdf.Image(images[i], 0, 0, &SIZE)
+	}
+	pdf.WritePdf(fmt.Sprint(pdfName, ".pdf"))
 }
