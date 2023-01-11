@@ -15,7 +15,7 @@ import (
 func main() {
 	s := bufio.NewScanner(os.Stdin)
 	for {
-		PdfName := Scan(s, "保存するPDFファイル名を入力してください")
+		pdfName := Scan(s, "保存するPDFファイル名を入力してください")
 		imageCount, err := strconv.Atoi(Scan(s, "何枚撮影するかを入力してください"))
 		if err != nil {
 			fmt.Println("撮影枚数は数字で入力してください。")
@@ -27,7 +27,7 @@ func main() {
 			continue
 		}
 		images := ScreenToImage(imageCount, imageTime)
-		ImageToPdf(PdfName, images)
+		ImageToPDF(pdfName, images)
 
 		c := Scan(s, "まだPDFを作成しますか？y/N")
 		if strings.ToLower(c) != "y" {
@@ -69,16 +69,16 @@ func ScreenToImage(imageCount, imageTime int) []string {
 	return images
 }
 
-func ImageToPdf(PdfName string, images []string) {
-	Pdf := gopdf.GoPdf{}
+func ImageToPDF(pdfName string, images []string) {
+	defer DeleteTmpPNG(images)
+	pdf := gopdf.GoPdf{}
 	SIZE := gopdf.Rect{W: 1920, H: 1080}
-	Pdf.Start(gopdf.Config{PageSize: SIZE})
+	pdf.Start(gopdf.Config{PageSize: SIZE})
 	for _, image := range images {
-		Pdf.AddPage()
-		Pdf.Image(image, 0, 0, &SIZE)
+		pdf.AddPage()
+		pdf.Image(image, 0, 0, &SIZE)
 	}
-	Pdf.WritePdf(fmt.Sprint(PdfName, ".pdf"))
-	DeleteTmpPNG(images)
+	pdf.WritePdf(fmt.Sprint(pdfName, ".pdf"))
 }
 
 func DeleteTmpPNG(images []string) {
