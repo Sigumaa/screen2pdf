@@ -73,16 +73,16 @@ func ImageToPdf(PdfName string, images []string) {
 	Pdf := gopdf.GoPdf{}
 	SIZE := gopdf.Rect{W: 1920, H: 1080}
 	Pdf.Start(gopdf.Config{PageSize: SIZE})
-	for i := 0; i < len(images); i++ {
+	for _, image := range images {
 		Pdf.AddPage()
-		Pdf.Image(images[i], 0, 0, &SIZE)
+		Pdf.Image(image, 0, 0, &SIZE)
 	}
 	Pdf.WritePdf(fmt.Sprint(PdfName, ".pdf"))
 	DeleteTmpPNG(images)
 }
 
 func DeleteTmpPNG(images []string) {
-	for i := 0; i < len(images); i++ {
-		os.Remove(fmt.Sprintf("tmp_%d.png", i))
+	for _, image := range images {
+		os.Remove(image)
 	}
 }
