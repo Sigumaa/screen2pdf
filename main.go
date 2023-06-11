@@ -3,13 +3,14 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/kbinani/screenshot"
-	"github.com/signintech/gopdf"
 	"image/png"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/kbinani/screenshot"
+	"github.com/signintech/gopdf"
 )
 
 func main() {
@@ -50,14 +51,9 @@ func Scan(s *bufio.Scanner, text string) string {
 func ScreenToImage(imageCount, imageTime int) []string {
 	var images []string
 
-	fmt.Println(imageCount, "秒後に撮影を開始します。")
+	fmt.Println("3秒後に撮影を開始します。")
+	time.Sleep(3 * time.Second)
 	for i := 0; i < imageCount; i++ {
-		for j := imageTime; j > 0; j-- {
-			time.Sleep(time.Second)
-			if j <= 3 {
-				fmt.Println(j)
-			}
-		}
 		bounds := screenshot.GetDisplayBounds(1)
 		img, _ := screenshot.CaptureRect(bounds)
 		fileName := fmt.Sprintf("tmp_%d.png", i)
@@ -65,6 +61,7 @@ func ScreenToImage(imageCount, imageTime int) []string {
 		defer file.Close()
 		png.Encode(file, img)
 		images = append(images, fileName)
+		time.Sleep(time.Duration(imageTime) * time.Second)
 	}
 	return images
 }
