@@ -26,6 +26,8 @@ github.com/signintech/gopdf v0.17.0 h1:uzH6owDaA6tdUUxswwyJgnTHOAlUXWduRumfLkVUE
 github.com/signintech/gopdf v0.17.0/go.mod h1:wrLtZoWaRNrS4hphED0oflFoa6IWkOu6M3nJjm4VbO4=
 github.com/signintech/gopdf v0.17.1 h1:7g1JCz5XtdyARU3DmGcsyO/eRWM5C2KXGFQ/9+pUCOM=
 github.com/signintech/gopdf v0.17.1/go.mod h1:wrLtZoWaRNrS4hphED0oflFoa6IWkOu6M3nJjm4VbO4=
+github.com/signintech/gopdf v0.19.0 h1:NcAGaKeAE++naiJvV77+fpVRWfxEDvcsCGPnErfVlas=
+github.com/signintech/gopdf v0.19.0/go.mod h1:wrLtZoWaRNrS4hphED0oflFoa6IWkOu6M3nJjm4VbO4=
 golang.org/x/sys v0.0.0-20201018230417-eeed37f84f13/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.4.0 h1:Zr2JFtRQNX3BCZ8YtxRE9hNJYC8J6I1MVbMg6owUp18=
 golang.org/x/sys v0.4.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

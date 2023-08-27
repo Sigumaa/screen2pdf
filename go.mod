@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/kbinani/screenshot v0.0.0-20210720154843-7d3a670d8329
-	github.com/signintech/gopdf v0.17.1
+	github.com/signintech/gopdf v0.19.0
 )
 
 require (
